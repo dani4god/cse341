@@ -1,0 +1,23 @@
+{
+  "name": "cse341",
+  "version": "1.0.0",
+  "description": "My First project",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dani4god/cse341.git"
+  },
+  "author": "Okeke Daniel",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dani4god/cse341/issues"
+  },
+  "homepage": "https://github.com/dani4god/cse341#readme",
+  "dependencies": {
+    "express": "^5.2.1",
+    "mongodb": "^7.1.0"
+  }
+}

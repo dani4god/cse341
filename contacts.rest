@@ -1,0 +1,47 @@
+### Contacts API Test Requests
+### Replace YOUR_BASE_URL with your Render URL or use http://localhost:3000 locally
+### Replace CONTACT_ID with a real MongoDB ObjectId from your database
+
+@baseUrl = http://localhost:3000
+@contactId = REPLACE_WITH_REAL_ID
+
+###
+# GET all contacts
+GET {{baseUrl}}/contacts
+Content-Type: application/json
+
+###
+# GET a single contact by ID
+GET {{baseUrl}}/contacts/{{contactId}}
+Content-Type: application/json
+
+###
+# POST - Create a new contact
+POST {{baseUrl}}/contacts
+Content-Type: application/json
+
+{
+  "firstName": "Alice",
+  "lastName": "Smith",
+  "email": "alice.smith@example.com",
+  "favoriteColor": "Green",
+  "birthday": "1995-03-22"
+}
+
+###
+# PUT - Update a contact by ID
+PUT {{baseUrl}}/contacts/{{contactId}}
+Content-Type: application/json
+
+{
+  "firstName": "Alice",
+  "lastName": "Johnson",
+  "email": "alice.johnson@example.com",
+  "favoriteColor": "Purple",
+  "birthday": "1995-03-22"
+}
+
+###
+# DELETE - Delete a contact by ID
+DELETE {{baseUrl}}/contacts/{{contactId}}
+Content-Type: application/json
