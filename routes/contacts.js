@@ -16,10 +16,10 @@ router.get('/', async (req, res) => {
   */
   try {
     const db = getDb();
-    const contacts = await db.collection('contacts').find().toArray();
+    const contacts = await db.collection('Contacts').find().toArray();
     res.status(200).json(contacts);
   } catch (err) {
-    res.status(500).json({ error: 'Failed to retrieve contacts.', details: err.message });
+    res.status(500).json({ error: 'Failed to retrieve Contacts.', details: err.message });
   }
 });
 
@@ -49,7 +49,7 @@ router.get('/:id', async (req, res) => {
     }
 
     const db = getDb();
-    const contact = await db.collection('contacts').findOne({ _id: new ObjectId(id) });
+    const contact = await db.collection('Contacts').findOne({ _id: new ObjectId(id) });
 
     if (!contact) {
       return res.status(404).json({ error: 'Contact not found.' });
@@ -85,7 +85,7 @@ router.post('/', async (req, res) => {
     }
 
     const db = getDb();
-    const result = await db.collection('contacts').insertOne({
+    const result = await db.collection('Contacts').insertOne({
       firstName,
       lastName,
       email,
@@ -136,7 +136,7 @@ router.put('/:id', async (req, res) => {
     }
 
     const db = getDb();
-    const result = await db.collection('contacts').replaceOne(
+    const result = await db.collection('Contacts').replaceOne(
       { _id: new ObjectId(id) },
       { firstName, lastName, email, favoriteColor, birthday }
     );
@@ -174,7 +174,7 @@ router.delete('/:id', async (req, res) => {
     }
 
     const db = getDb();
-    const result = await db.collection('contacts').deleteOne({ _id: new ObjectId(id) });
+    const result = await db.collection('Contacts').deleteOne({ _id: new ObjectId(id) });
 
     if (result.deletedCount === 0) {
       return res.status(404).json({ error: 'Contact not found.' });
