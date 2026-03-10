@@ -2,7 +2,7 @@
 ### Replace YOUR_BASE_URL with your Render URL or use http://localhost:3000 locally
 ### Replace CONTACT_ID with a real MongoDB ObjectId from your database
 
-@baseUrl = http://localhost:3000
+@baseUrl = https://cse341-ie1j.onrender.com
 @contactId = REPLACE_WITH_REAL_ID
 
 ###
