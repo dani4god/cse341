@@ -26,7 +26,7 @@ mongodb.initDb((err) => {
   } else {
     app.listen(port, () => {
       console.log(`Server running on port ${port}`);
-      console.log(`API Docs available at http://localhost:${port}/api-docs`);
+      console.log(`API Docs available at https://cse341-ie1j.onrender.com:${port}/api-docs`);
     });
   }
 });

@@ -9,7 +9,7 @@ const doc = {
       name: 'API Support'
     }
   },
-  host: 'localhost:3000',
+  host: 'cse341-ie1j.onrender.com',
   schemes: ['http', 'https'],
   tags: [
     {
