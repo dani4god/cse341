@@ -1,6 +1,6 @@
 ### Contacts API Test Requests
-### Replace YOUR_BASE_URL with your Render URL or use http://localhost:3000 locally
-### Replace CONTACT_ID with a real MongoDB ObjectId from your database
+### I will replace YOUR_BASE_URL with your Render URL or use http://localhost:3000 locally
+### I will replace CONTACT_ID with a real MongoDB ObjectId from your database
 
 @baseUrl = https://cse341-ie1j.onrender.com
 @contactId = REPLACE_WITH_REAL_ID
@@ -10,7 +10,7 @@
 GET {{baseUrl}}/contacts
 Content-Type: application/json
 
-###
+### 
 # GET a single contact by ID
 GET {{baseUrl}}/contacts/{{contactId}}
 Content-Type: application/json

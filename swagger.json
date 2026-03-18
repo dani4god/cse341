@@ -7,7 +7,7 @@
   },
   "host": "cse341-ie1j.onrender.com",
   "basePath": "/",
-  "schemes": ["http", "https"],
+  "schemes": ["https"],
   "tags": [
     {
       "name": "Contacts",
