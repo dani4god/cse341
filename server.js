@@ -1,6 +1,5 @@
 const express = require('express');
 const session = require('express-session');
-const MongoStore = require('connect-mongo')(require('express-session'));
 const passport = require('./config/passport');
 const mongodb = require('./db/connect');
 const swaggerUi = require('swagger-ui-express');
@@ -16,10 +15,7 @@ app.use(express.json());
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
-  saveUninitialized: false,
-  store: new MongoStore({
-    mongoUrl: process.env.MONGODB_URI
-  })
+  saveUninitialized: false
 }));
 
 // Passport middleware
