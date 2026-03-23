@@ -1,8 +1,8 @@
 const express = require('express');
 const session = require('express-session');
+const MongoStore = require('connect-mongo')(require('express-session'));
 const passport = require('./config/passport');
 const mongodb = require('./db/connect');
-const MongoStore = require('connect-mongo');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 require('dotenv').config();
@@ -17,7 +17,7 @@ app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
-  store: MongoStore.create({
+  store: new MongoStore({
     mongoUrl: process.env.MONGODB_URI
   })
 }));
