@@ -2,17 +2,16 @@
   "swagger": "2.0",
   "info": {
     "title": "Contacts API",
-    "description": "A RESTful API for storing and retrieving contact information including friends and work colleagues.",
-    "version": "1.0.0"
+    "description": "A RESTful API for storing and retrieving contact information. Some routes require GitHub OAuth authentication.",
+    "version": "2.0.0"
   },
   "host": "cse341-ie1j.onrender.com",
   "basePath": "/",
   "schemes": ["https"],
   "tags": [
-    {
-      "name": "Contacts",
-      "description": "Endpoints for managing contacts"
-    }
+    { "name": "Contacts", "description": "Endpoints for managing contacts" },
+    { "name": "Users", "description": "Endpoints for managing users (requires authentication)" },
+    { "name": "Auth", "description": "Authentication endpoints" }
   ],
   "paths": {
     "/contacts": {
@@ -21,10 +20,7 @@
         "summary": "Get all contacts",
         "description": "Returns a list of all contacts in the database.",
         "responses": {
-          "200": {
-            "description": "Successfully retrieved all contacts.",
-            "schema": { "$ref": "#/definitions/ContactsList" }
-          },
+          "200": { "description": "Successfully retrieved all contacts.", "schema": { "$ref": "#/definitions/ContactsList" } },
           "500": { "description": "Internal server error." }
         }
       },
@@ -33,13 +29,7 @@
         "summary": "Create a new contact",
         "description": "Adds a new contact to the database.",
         "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "description": "Contact data to create.",
-            "required": true,
-            "schema": { "$ref": "#/definitions/NewContact" }
-          }
+          { "in": "body", "name": "body", "required": true, "schema": { "$ref": "#/definitions/NewContact" } }
         ],
         "responses": {
           "201": { "description": "Contact created successfully." },
@@ -54,19 +44,10 @@
         "summary": "Get a contact by ID",
         "description": "Returns a single contact matching the given MongoDB ObjectId.",
         "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "description": "MongoDB ObjectId of the contact",
-            "required": true,
-            "type": "string"
-          }
+          { "in": "path", "name": "id", "required": true, "type": "string", "description": "MongoDB ObjectId of the contact" }
         ],
         "responses": {
-          "200": {
-            "description": "Successfully retrieved the contact.",
-            "schema": { "$ref": "#/definitions/Contact" }
-          },
+          "200": { "description": "Successfully retrieved the contact.", "schema": { "$ref": "#/definitions/Contact" } },
           "400": { "description": "Invalid ID format." },
           "404": { "description": "Contact not found." },
           "500": { "description": "Internal server error." }
@@ -77,20 +58,8 @@
         "summary": "Update a contact by ID",
         "description": "Updates an existing contact's information.",
         "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "description": "MongoDB ObjectId of the contact to update",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "in": "body",
-            "name": "body",
-            "description": "Updated contact data.",
-            "required": true,
-            "schema": { "$ref": "#/definitions/NewContact" }
-          }
+          { "in": "path", "name": "id", "required": true, "type": "string" },
+          { "in": "body", "name": "body", "required": true, "schema": { "$ref": "#/definitions/NewContact" } }
         ],
         "responses": {
           "200": { "description": "Contact updated successfully." },
@@ -104,19 +73,118 @@
         "summary": "Delete a contact by ID",
         "description": "Permanently removes a contact from the database.",
         "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "description": "MongoDB ObjectId of the contact to delete",
-            "required": true,
-            "type": "string"
-          }
+          { "in": "path", "name": "id", "required": true, "type": "string" }
         ],
         "responses": {
           "200": { "description": "Contact deleted successfully." },
           "400": { "description": "Invalid ID format." },
           "404": { "description": "Contact not found." },
           "500": { "description": "Internal server error." }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get all users (requires authentication)",
+        "description": "Returns a list of all users. Requires GitHub OAuth login.",
+        "responses": {
+          "200": { "description": "Successfully retrieved all users.", "schema": { "$ref": "#/definitions/UsersList" } },
+          "401": { "description": "Unauthorized. Please log in." },
+          "500": { "description": "Internal server error." }
+        }
+      },
+      "post": {
+        "tags": ["Users"],
+        "summary": "Create a new user (requires authentication)",
+        "description": "Adds a new user to the database. Requires GitHub OAuth login.",
+        "parameters": [
+          { "in": "body", "name": "body", "required": true, "schema": { "$ref": "#/definitions/NewUser" } }
+        ],
+        "responses": {
+          "201": { "description": "User created successfully." },
+          "400": { "description": "Missing required fields." },
+          "401": { "description": "Unauthorized. Please log in." },
+          "500": { "description": "Internal server error." }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get a user by ID (requires authentication)",
+        "description": "Returns a single user matching the given MongoDB ObjectId.",
+        "parameters": [
+          { "in": "path", "name": "id", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "200": { "description": "Successfully retrieved the user.", "schema": { "$ref": "#/definitions/User" } },
+          "400": { "description": "Invalid ID format." },
+          "401": { "description": "Unauthorized. Please log in." },
+          "404": { "description": "User not found." },
+          "500": { "description": "Internal server error." }
+        }
+      },
+      "put": {
+        "tags": ["Users"],
+        "summary": "Update a user by ID (requires authentication)",
+        "description": "Updates an existing user's information.",
+        "parameters": [
+          { "in": "path", "name": "id", "required": true, "type": "string" },
+          { "in": "body", "name": "body", "required": true, "schema": { "$ref": "#/definitions/NewUser" } }
+        ],
+        "responses": {
+          "200": { "description": "User updated successfully." },
+          "400": { "description": "Invalid ID format or missing fields." },
+          "401": { "description": "Unauthorized. Please log in." },
+          "404": { "description": "User not found." },
+          "500": { "description": "Internal server error." }
+        }
+      },
+      "delete": {
+        "tags": ["Users"],
+        "summary": "Delete a user by ID (requires authentication)",
+        "description": "Permanently removes a user from the database.",
+        "parameters": [
+          { "in": "path", "name": "id", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "200": { "description": "User deleted successfully." },
+          "400": { "description": "Invalid ID format." },
+          "401": { "description": "Unauthorized. Please log in." },
+          "404": { "description": "User not found." },
+          "500": { "description": "Internal server error." }
+        }
+      }
+    },
+    "/auth/github": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "Login with GitHub",
+        "description": "Redirects to GitHub for OAuth authentication.",
+        "responses": {
+          "302": { "description": "Redirects to GitHub login page." }
+        }
+      }
+    },
+    "/auth/logout": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "Logout",
+        "description": "Logs the current user out and ends the session.",
+        "responses": {
+          "302": { "description": "Redirects to home page after logout." }
+        }
+      }
+    },
+    "/auth/current-user": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "Get current logged in user",
+        "description": "Returns the currently authenticated user's profile.",
+        "responses": {
+          "200": { "description": "Returns current user profile." },
+          "401": { "description": "Not logged in." }
         }
       }
     }
@@ -147,6 +215,36 @@
     "ContactsList": {
       "type": "array",
       "items": { "$ref": "#/definitions/Contact" }
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "_id": { "type": "string", "example": "60d5ec49f1b2c8b1f8e4e1a1" },
+        "firstName": { "type": "string", "example": "John" },
+        "lastName": { "type": "string", "example": "Smith" },
+        "email": { "type": "string", "example": "john.smith@example.com" },
+        "phone": { "type": "string", "example": "555-123-4567" },
+        "address": { "type": "string", "example": "123 Main St" },
+        "role": { "type": "string", "example": "admin" },
+        "createdAt": { "type": "string", "example": "2024-01-15" }
+      }
+    },
+    "NewUser": {
+      "type": "object",
+      "required": ["firstName", "lastName", "email", "phone", "address", "role", "createdAt"],
+      "properties": {
+        "firstName": { "type": "string", "example": "John" },
+        "lastName": { "type": "string", "example": "Smith" },
+        "email": { "type": "string", "example": "john.smith@example.com" },
+        "phone": { "type": "string", "example": "555-123-4567" },
+        "address": { "type": "string", "example": "123 Main St" },
+        "role": { "type": "string", "example": "admin" },
+        "createdAt": { "type": "string", "example": "2024-01-15" }
+      }
+    },
+    "UsersList": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/User" }
     }
   }
 }
