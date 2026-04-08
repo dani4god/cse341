@@ -17,10 +17,10 @@
   },
   "homepage": "https://github.com/dani4god/cse341#readme",
   "dependencies": {
-    "dotenv": "^17.3.1",
+    "dotenv": "^17.4.1",
     "express": "^5.2.1",
     "express-session": "^1.19.0",
-    "mongodb": "^7.1.0",
+    "mongodb": "^7.1.1",
     "passport": "^0.7.0",
     "passport-github2": "^0.1.12",
     "swagger-autogen": "^2.23.7",
