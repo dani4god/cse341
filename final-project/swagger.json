@@ -5,9 +5,9 @@
     "description": "A RESTful API for managing an online shopping platform including products and orders.",
     "version": "1.0.0"
   },
-  "host": "localhost:3000",
+  "host": "https://cse341-ie1j.onrender.com",
   "basePath": "/",
-  "schemes": ["http"],
+  "schemes": ["https"],
   "tags": [
     { "name": "Products", "description": "Endpoints for managing products" },
     { "name": "Orders", "description": "Endpoints for managing orders" }
