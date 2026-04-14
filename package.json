@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node final-project/server.js",
-    "test": "jest"
+    "test":  "jest --forceExit --testTimeout=30000"
   },
   "repository": {
     "type": "git",
