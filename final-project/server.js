@@ -1,6 +1,6 @@
 const express = require('express');
 const session = require('express-session');
-const passport = require('./config/oauth');  // Make sure this path is correct
+const passport = require('./config/oauth');
 const mongodb = require('./db/connect');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
@@ -11,18 +11,18 @@ const port = process.env.PORT || 3000;
 
 app.use(express.json());
 
-// Session middleware - WITH PROPER CONFIGURATION (from your working version)
+// Session middleware 
 app.use(session({
   secret: process.env.SESSION_SECRET || 'shopsphere2024secretkey',
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: true,     // HTTPS required
+    secure: false,     
     httpOnly: true,
     sameSite: 'lax',
     maxAge: 24 * 60 * 60 * 1000
   },
-  proxy: true         // Trust Render's proxy
+  proxy: true
 }));
 
 // Passport middleware
@@ -32,7 +32,7 @@ app.use(passport.session());
 // Swagger API docs
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-// Routes - Update these to match your collections
+// Routes
 app.use('/products', require('./routes/products'));
 app.use('/orders', require('./routes/orders'));
 app.use('/users', require('./routes/users'));
@@ -63,7 +63,7 @@ app.get('/profile', (req, res) => {
   res.json(req.user);
 });
 
-// Root route - Updated for your ShopSphere API
+// Root route
 app.get('/', (req, res) => {
   res.send(`
     <h2>ShopSphere Online Store API</h2>
