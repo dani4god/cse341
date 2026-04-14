@@ -4,7 +4,8 @@
   "description": "My First project",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node final-project/server.js",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -25,5 +26,9 @@
     "passport-github2": "^0.1.12",
     "swagger-autogen": "^2.23.7",
     "swagger-ui-express": "^5.0.1"
+  },
+  "devDependencies": {
+    "jest": "^30.3.0",
+    "supertest": "^7.2.2"
   }
 }

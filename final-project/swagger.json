@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "title": "ShopSphere Online Store API",
-    "description": "A RESTful API for managing an online shopping platform including products and orders.",
+    "description": "A RESTful API for managing an online shopping platform including products, orders, users, and reviews.",
     "version": "1.0.0"
   },
   "host": "cse341-final-4ubm.onrender.com",
@@ -10,7 +10,9 @@
   "schemes": ["https"],
   "tags": [
     { "name": "Products", "description": "Endpoints for managing products" },
-    { "name": "Orders", "description": "Endpoints for managing orders" }
+    { "name": "Orders", "description": "Endpoints for managing orders" },
+    { "name": "Users", "description": "Endpoints for managing users" },
+    { "name": "Reviews", "description": "Endpoints for managing product reviews" }
   ],
   "paths": {
     "/products": {
@@ -150,6 +152,144 @@
           "500": { "description": "Internal server error." }
         }
       }
+    },
+    "/users": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get all users",
+        "description": "Returns a list of all users in the database.",
+        "responses": {
+          "200": { "description": "Successfully retrieved all users.", "schema": { "$ref": "#/definitions/UsersList" } },
+          "500": { "description": "Internal server error." }
+        }
+      },
+      "post": {
+        "tags": ["Users"],
+        "summary": "Create a new user",
+        "description": "Adds a new user to the database.",
+        "parameters": [
+          { "in": "body", "name": "body", "required": true, "schema": { "$ref": "#/definitions/NewUser" } }
+        ],
+        "responses": {
+          "201": { "description": "User created successfully." },
+          "400": { "description": "Missing required fields." },
+          "500": { "description": "Internal server error." }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get a user by ID",
+        "description": "Returns a single user matching the given MongoDB ObjectId.",
+        "parameters": [
+          { "in": "path", "name": "id", "required": true, "type": "string", "description": "MongoDB ObjectId of the user" }
+        ],
+        "responses": {
+          "200": { "description": "Successfully retrieved the user.", "schema": { "$ref": "#/definitions/User" } },
+          "400": { "description": "Invalid ID format." },
+          "404": { "description": "User not found." },
+          "500": { "description": "Internal server error." }
+        }
+      },
+      "put": {
+        "tags": ["Users"],
+        "summary": "Update a user by ID",
+        "description": "Updates an existing user's information.",
+        "parameters": [
+          { "in": "path", "name": "id", "required": true, "type": "string" },
+          { "in": "body", "name": "body", "required": true, "schema": { "$ref": "#/definitions/NewUser" } }
+        ],
+        "responses": {
+          "200": { "description": "User updated successfully." },
+          "400": { "description": "Invalid ID format or missing fields." },
+          "404": { "description": "User not found." },
+          "500": { "description": "Internal server error." }
+        }
+      },
+      "delete": {
+        "tags": ["Users"],
+        "summary": "Delete a user by ID",
+        "description": "Permanently removes a user from the database.",
+        "parameters": [
+          { "in": "path", "name": "id", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "200": { "description": "User deleted successfully." },
+          "400": { "description": "Invalid ID format." },
+          "404": { "description": "User not found." },
+          "500": { "description": "Internal server error." }
+        }
+      }
+    },
+    "/reviews": {
+      "get": {
+        "tags": ["Reviews"],
+        "summary": "Get all reviews",
+        "description": "Returns a list of all product reviews in the database.",
+        "responses": {
+          "200": { "description": "Successfully retrieved all reviews.", "schema": { "$ref": "#/definitions/ReviewsList" } },
+          "500": { "description": "Internal server error." }
+        }
+      },
+      "post": {
+        "tags": ["Reviews"],
+        "summary": "Create a new review",
+        "description": "Adds a new product review to the database.",
+        "parameters": [
+          { "in": "body", "name": "body", "required": true, "schema": { "$ref": "#/definitions/NewReview" } }
+        ],
+        "responses": {
+          "201": { "description": "Review created successfully." },
+          "400": { "description": "Missing required fields or invalid rating." },
+          "500": { "description": "Internal server error." }
+        }
+      }
+    },
+    "/reviews/{id": {
+      "get": {
+        "tags": ["Reviews"],
+        "summary": "Get a review by ID",
+        "description": "Returns a single review matching the given MongoDB ObjectId.",
+        "parameters": [
+          { "in": "path", "name": "id", "required": true, "type": "string", "description": "MongoDB ObjectId of the review" }
+        ],
+        "responses": {
+          "200": { "description": "Successfully retrieved the review.", "schema": { "$ref": "#/definitions/Review" } },
+          "400": { "description": "Invalid ID format." },
+          "404": { "description": "Review not found." },
+          "500": { "description": "Internal server error." }
+        }
+      },
+      "put": {
+        "tags": ["Reviews"],
+        "summary": "Update a review by ID",
+        "description": "Updates an existing review's information.",
+        "parameters": [
+          { "in": "path", "name": "id", "required": true, "type": "string" },
+          { "in": "body", "name": "body", "required": true, "schema": { "$ref": "#/definitions/NewReview" } }
+        ],
+        "responses": {
+          "200": { "description": "Review updated successfully." },
+          "400": { "description": "Invalid ID format, missing fields, or invalid rating." },
+          "404": { "description": "Review not found." },
+          "500": { "description": "Internal server error." }
+        }
+      },
+      "delete": {
+        "tags": ["Reviews"],
+        "summary": "Delete a review by ID",
+        "description": "Permanently removes a review from the database.",
+        "parameters": [
+          { "in": "path", "name": "id", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "200": { "description": "Review deleted successfully." },
+          "400": { "description": "Invalid ID format." },
+          "404": { "description": "Review not found." },
+          "500": { "description": "Internal server error." }
+        }
+      }
     }
   },
   "definitions": {
@@ -210,6 +350,64 @@
     "OrdersList": {
       "type": "array",
       "items": { "$ref": "#/definitions/Order" }
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "_id": { "type": "string", "example": "60d5ec49f1b2c8b1f8e4e1a1" },
+        "displayName": { "type": "string", "example": "john_doe" },
+        "firstName": { "type": "string", "example": "John" },
+        "lastName": { "type": "string", "example": "Doe" },
+        "email": { "type": "string", "example": "john@example.com" },
+        "role": { "type": "string", "example": "customer" },
+        "oauthProvider": { "type": "string", "example": "github" },
+        "authId": { "type": "string", "example": "123456789" },
+        "createdAt": { "type": "string", "example": "2024-01-15" }
+      }
+    },
+    "NewUser": {
+      "type": "object",
+      "required": ["displayName", "firstName", "lastName", "email", "role", "oauthProvider", "authId", "createdAt"],
+      "properties": {
+        "displayName": { "type": "string", "example": "john_doe" },
+        "firstName": { "type": "string", "example": "John" },
+        "lastName": { "type": "string", "example": "Doe" },
+        "email": { "type": "string", "example": "john@example.com" },
+        "role": { "type": "string", "example": "customer" },
+        "oauthProvider": { "type": "string", "example": "github" },
+        "authId": { "type": "string", "example": "123456789" },
+        "createdAt": { "type": "string", "example": "2024-01-15" }
+      }
+    },
+    "UsersList": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/User" }
+    },
+    "Review": {
+      "type": "object",
+      "properties": {
+        "_id": { "type": "string", "example": "60d5ec49f1b2c8b1f8e4e1a1" },
+        "productId": { "type": "string", "example": "60d5ec49f1b2c8b1f8e4e1a2" },
+        "userId": { "type": "string", "example": "60d5ec49f1b2c8b1f8e4e1a3" },
+        "rating": { "type": "number", "example": 5 },
+        "comment": { "type": "string", "example": "Great product!" },
+        "createdAt": { "type": "string", "example": "2024-01-15" }
+      }
+    },
+    "NewReview": {
+      "type": "object",
+      "required": ["productId", "userId", "rating", "comment", "createdAt"],
+      "properties": {
+        "productId": { "type": "string", "example": "60d5ec49f1b2c8b1f8e4e1a2" },
+        "userId": { "type": "string", "example": "60d5ec49f1b2c8b1f8e4e1a3" },
+        "rating": { "type": "number", "example": 5, "minimum": 1, "maximum": 5 },
+        "comment": { "type": "string", "example": "Great product!" },
+        "createdAt": { "type": "string", "example": "2024-01-15" }
+      }
+    },
+    "ReviewsList": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/Review" }
     }
   }
 }
