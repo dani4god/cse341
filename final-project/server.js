@@ -1,6 +1,6 @@
 const express = require('express');
 const session = require('express-session');
-const passport = require('./config/oauth');
+const passport = require('./config/oauth');  // Make sure this path is correct
 const mongodb = require('./db/connect');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
@@ -9,7 +9,9 @@ require('dotenv').config();
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Session middleware - CONFIGURED FOR RENDER
+app.use(express.json());
+
+// Session middleware - WITH PROPER CONFIGURATION (from your working version)
 app.use(session({
   secret: process.env.SESSION_SECRET || 'shopsphere2024secretkey',
   resave: false,
@@ -23,14 +25,18 @@ app.use(session({
   proxy: true         // Trust Render's proxy
 }));
 
-// Initialize Passport
+// Passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(express.json());
-
 // Swagger API docs
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+// Routes - Update these to match your collections
+app.use('/products', require('./routes/products'));
+app.use('/orders', require('./routes/orders'));
+app.use('/users', require('./routes/users'));
+app.use('/reviews', require('./routes/reviews'));
 
 // Auth Routes
 app.get('/auth/github', passport.authenticate('github', { scope: ['user:email'] }));
@@ -42,7 +48,7 @@ app.get('/auth/github/callback',
   }
 );
 
-app.get('/logout', (req, res) => {
+app.get('/auth/logout', (req, res) => {
   req.logout((err) => {
     if (err) return res.status(500).json({ error: err.message });
     res.redirect('/');
@@ -57,35 +63,20 @@ app.get('/profile', (req, res) => {
   res.json(req.user);
 });
 
-// Check auth route for debugging
-app.get('/check-auth', (req, res) => {
-  res.json({
-    authenticated: req.isAuthenticated(),
-    sessionID: req.sessionID,
-    user: req.user || null
-  });
-});
-
-// Routes
-app.use('/products', require('./routes/products'));
-app.use('/orders', require('./routes/orders'));
-app.use('/users', require('./routes/users'));
-app.use('/reviews', require('./routes/reviews'));
-
-// Root route
+// Root route - Updated for your ShopSphere API
 app.get('/', (req, res) => {
   res.send(`
     <h2>ShopSphere Online Store API</h2>
     ${req.isAuthenticated() ? 
-      `<p>Welcome, ${req.user.displayName}! <a href="/logout">Logout</a> | <a href="/profile">Profile</a> | <a href="/check-auth">Check Auth</a></p>` :
+      `<p>Welcome, ${req.user.displayName}! <a href="/auth/logout">Logout</a> | <a href="/profile">Profile</a></p>` :
       `<p><a href="/auth/github">Login with GitHub</a></p>`
     }
     <p><a href="/api-docs">Go to API Documentation</a></p>
   `);
 });
 
-// Add SESSION_SECRET to Render if not already there
 console.log('Session secret exists:', !!process.env.SESSION_SECRET);
+console.log('GitHub Client ID exists:', !!process.env.GITHUB_CLIENT_ID);
 
 mongodb.initDb((err) => {
   if (err) {
